@@ -6,7 +6,7 @@ A probabilistic approach to estimating customer lifetime value using the "Buy 'T
 
 Please run:
 
-docker build -t <image_name> <dir> 
+docker build -t "image_name" "dir" 
 
 For example:
 
