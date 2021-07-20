@@ -30,7 +30,8 @@ def load_data(file):
     """
     data = pd.read_csv(file)
     data.columns = [
-        snakify(col) if col != 'T_CAL' else 'T_cal' for col in data.columns
+        snakify(col) if col not in ('T_CAL', 'T_cal') else 'T_cal'
+        for col in data.columns
     ]
     key = 'customer_id'
     data[key] = data[key].astype("object")
