@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
-from trainer import load_data
+from utils.trainer import load_data
 
 output_file = 'predictions.csv'
 
@@ -46,7 +46,7 @@ def run_model(input_file, mbg_pkl, ggf_pkl, t, r):
 
     """
     mbg, ggf = load_params(mbg_pkl, ggf_pkl)
-    data = load_data(file=input_file)
+    data = load_data(data=input_file)
     data['p_alive'] = alive(data, mbg)
     data['prediction'] = round(
         ltv_predict(data, mbg, ggf, time=t, discount_rate=r), 2)

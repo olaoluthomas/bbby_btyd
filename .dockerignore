@@ -5,3 +5,8 @@ README.md
 *.pyd
 __pycache__
 .pytest_cache
+*.code-workspace
+.gitignore
+.dockerignore
+.git
+LICENSE

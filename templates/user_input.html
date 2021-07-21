@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>User Input</title>
+    </head>
+    <body>
+        {% extends "template.html" %}
+        {% block content %}
+        <h1>User Input to Model</h1>
+        <p> Please fill the form below </p>
+        <form action="demo" method="POST">
+            <fieldset>
+                <legend>Fill Customer RFM Metrics in:</legend>
+                <label for="freq">Customer frequency (int):</label><br>
+                <input type=number id="freq" name="freq" value=5><br>
+                <label for="rec"># of days between first and last transaction (int):</label><br>
+                <input type=number id="rec" name="rec" value=250><br>
+                <label for="T"># of days since first transaction (int):</label><br>
+                <input type=number id="T" name="T" value=1250><br>
+                <label for="m_value">Avg. Product Margin (float):</label><br>
+                <input type=number id="m_value" name="m_value" value=30.99><br><br>
+                <input type="submit" value="Submit">
+            </fieldset>
+        </form>
+        {% endblock %}
+    </body>
+</html>
