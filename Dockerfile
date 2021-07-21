@@ -4,6 +4,8 @@ FROM python:3.9-slim
 
 # Allow statements and log messages to immediately appear in the Knative logs
 ENV PYTHONUNBUFFERED True
+ENV PORT 8080
+# hardcoding port assignment so it builds in local test of docker
 
 # Copy local code to the container image.
 ENV APP_HOME /app

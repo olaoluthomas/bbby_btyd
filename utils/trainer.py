@@ -4,16 +4,14 @@ import pandas as pd
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
 from sklearn.metrics import mean_absolute_error
 
-# logger = logging.getLogger()
-# logger.setLevel(logging.ERROR)
+train_data = "train_data.csv"
 
 
-def load_data(path_to_training_data):
+def load_data(data):
     """
     Load dataset as a pandas dataframe from csv.
     """
-    data = pd.read_csv(path_to_training_data
-                       )  # I need to set up ingestion from cloud storage / BQ
+    data = pd.read_csv(data)  # I need to set up ingestion from cloud storage / BQ
     key = 'customer_id'
     data[key] = data[key].astype("object")
     return data
@@ -56,24 +54,28 @@ def save_pickle(mbg, ggf):
     ggf.save_model('ggf.pkl', save_date=False, save_generate_data_method=False)
 
 
-def run_training(path_to_training_data):
-    data = load_data(path_to_training_data)
+def run_training(train_data):
+    data = load_data(data=train_data)
     mbg = mbg_fitter(data=data)
     repeat = data[data['frequency_cal'] > 0]
     repeat.loc[repeat['monetary_value'] <= 0, ['monetary_value']] = 0.0001
     # checking the independence assumption
-    if abs(repeat[['frequency_cal', 'monetary_value'
-                   ]].corr()['frequency_cal']['monetary_value']) < 0.1:
+    p_corr = repeat[['frequency_cal', 'monetary_value'
+                     ]].corr()['frequency_cal']['monetary_value']
+    if abs(p_corr) < 0.1:
         ggf = ggf_fitter(data=repeat)
         print(
             "Expected conditional average profit: %s, Average future profit: %s"
-            % (ggf.conditional_expected_average_profit(
-                repeat['frequency_cal'], repeat['monetary_value']).mean(),
-               repeat['monetary_holdout'].mean()))
-        absolute_val_error = save_training_error(repeat=repeat, ggf=ggf) # how to spit this out to console
+            % (round(
+                ggf.conditional_expected_average_profit(
+                    repeat['frequency_cal'], repeat['monetary_value']).mean(),
+                2), round(repeat['monetary_holdout'].mean(), 2)))
+        absolute_val_error = save_training_error(
+            repeat=repeat, ggf=ggf)  # how to spit this out to console
         save_pickle(mbg=mbg, ggf=ggf)
-        return absolute_val_error # better yet, save error to file or print to console...
+        # better yet, save error to file or print to console...
+        return absolute_val_error
     else:
         logging.warning(
-            "Pearson correlation co-efficient appears to be too high (independence assumption violated...)"
-        )
+            "Pearson correlation co-efficient {} appears to be too high (independence assumption violated...)"
+            .format(round(p_corr, 5)))
