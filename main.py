@@ -1,9 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 from flask import Flask, request, Response, render_template
 import pandas as pd
-import numpy as np
 import os
-from utils import trainer, scorer
+from utils.scorer import load_params, ltv_predict
 
 app = Flask(__name__)
 
@@ -28,7 +27,7 @@ def demo():
 
     if request.method == 'POST':
         # Check for presence of pickle files and then load HTML form.
-        mbg, ggf = scorer.load_params("mbg.pkl", "ggf.pkl")
+        mbg, ggf = load_params("mbg.pkl", "ggf.pkl")
         print('Model parameters loaded successfully.')
         # pick up inputs from HTML form
         input_row = pd.DataFrame(columns=[
@@ -38,12 +37,12 @@ def demo():
         for col in input_row.columns:
             if col in ['frequency_cal', 'recency_cal', 'T_cal']:
                 input_row[col] = input_row[col].astype('int')
-        # score data from filled HTML form and send response
-        output = scorer.ltv_predict(input_row,
-                                    mbg=mbg,
-                                    ggf=ggf,
-                                    discount_rate=0.00764,
-                                    time=12)
+        # score data from filled HTML form and send prediction
+        output = ltv_predict(input_row,
+                             mbg=mbg,
+                             ggf=ggf,
+                             discount_rate=0.00764,
+                             time=12)
         return render_template('demo_result.html', output=round(output[0], 2))
 
 
