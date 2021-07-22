@@ -37,6 +37,8 @@ def demo():
         for col in input_row.columns:
             if col in ['frequency_cal', 'recency_cal', 'T_cal']:
                 input_row[col] = input_row[col].astype('int')
+            else:
+                input_row[col] = input_row[col].astype('float')
         # score data from filled HTML form and send prediction
         output = ltv_predict(input_row,
                              mbg=mbg,
