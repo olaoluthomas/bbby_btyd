@@ -1,8 +1,9 @@
 ﻿# -*- coding: utf-8 -*-
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
+import os, shutil
 from utils.trainer import load_data
 
-output_file = 'predictions.csv'
+output_file = "predictions.csv"
 
 
 def load_params(mbg_, ggf_):
@@ -38,18 +39,21 @@ def ltv_predict(data, mbg, ggf, discount_rate, time):
                                        discount_rate=discount_rate)
 
 
-def run_model(input_file, mbg_pkl, ggf_pkl, t, r):
+def run_model(input_file, mbg, ggf, t, r):
     """
     Initialize model, run predictions, and save output to file.
 
     Args:
 
     """
-    mbg, ggf = load_params(mbg_pkl, ggf_pkl)
     data = load_data(data=input_file)
+    print('Data loaded successfully...')
     data['p_alive'] = alive(data, mbg)
     data['prediction'] = round(
         ltv_predict(data, mbg, ggf, time=t, discount_rate=r), 2)
-    data[['customer_id', 'p_alive', 'prediction']].to_csv(output_file,
-                                                          index=False,
-                                                          encoding='utf-8') # set up dumping result to BQ/CS or console print.
+    data[['customer_id', 'p_alive', 'prediction']].to_csv(
+        output_file, index=False,
+        encoding='utf-8')  # set up dumping result to BQ/CS or console print.
+    print('Data scored successfully...')
+    shutil.copy("./"+output_file, "/data")
+    print('File moved to attached volume.')

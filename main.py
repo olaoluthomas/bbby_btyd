@@ -1,8 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, render_template
 import pandas as pd
 import os
-from utils.scorer import load_params, ltv_predict
+from utils.scorer import load_params, ltv_predict, run_model
 
 app = Flask(__name__)
 
@@ -20,15 +20,20 @@ def user_input():
 @app.route("/demo", methods=['GET', 'POST'])
 def demo():
     '''
-    Load model parameters and score HTML form input.
+    Load model parameters and score population file OR score HTML form input.
     '''
+    mbg, ggf = load_params("mbg.pkl", "ggf.pkl")
+    t = 12
+    d = 0.00764
+    print('Model parameters loaded successfully.')
     if request.method == 'GET':
-        return Response("Click on the 'User Input' link to get a demo.")
+        for file in os.listdir('./data'):
+            if file.endswith('to_score.csv'):
+                data_file = file  # how do you make sure you have a single "to_score" file?
+        run_model('data/'+data_file, mbg=mbg, ggf=ggf, t=t, r=d)
+        return render_template('train_score.html')
 
     if request.method == 'POST':
-        # Check for presence of pickle files and then load HTML form.
-        mbg, ggf = load_params("mbg.pkl", "ggf.pkl")
-        print('Model parameters loaded successfully.')
         # pick up inputs from HTML form
         input_row = pd.DataFrame(columns=[
             'frequency_cal', 'recency_cal', 'T_cal', 'monetary_value'
@@ -43,8 +48,8 @@ def demo():
         output = ltv_predict(input_row,
                              mbg=mbg,
                              ggf=ggf,
-                             discount_rate=0.00764,
-                             time=12)
+                             discount_rate=d,
+                             time=t)
         return render_template('demo_result.html', output=round(output[0], 2))
 
 
