@@ -9,6 +9,10 @@
        {% block content %}
        <h1> LTV - Buy 'Til You Die! </h1>
        <p> Demonstration of LTV in Vertex AI </p>
-       {% endblock %}
+       <form action="demo" method="GET" id="pred_form">
+          <p> Click the "Submit" button below to run the model</p>
+      </form>
+      <button type="submit" form="pred_form" value="Submit">Submit</button>
+      {% endblock %}
      </body>
 </html>

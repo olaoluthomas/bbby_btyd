@@ -1,5 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 import logging
+import re
 import pandas as pd
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
 from sklearn.metrics import mean_absolute_error
@@ -7,11 +8,23 @@ from sklearn.metrics import mean_absolute_error
 train_data = "train_data.csv"
 
 
+def snakify(column_name):
+    '''
+    Function to convert pandas column names into snake case.
+    '''
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', column_name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+
 def load_data(data):
     """
     Load dataset as a pandas dataframe from csv.
     """
-    data = pd.read_csv(data)  # I need to set up ingestion from cloud storage / BQ
+    data = pd.read_csv(
+        data)  # I need to set up ingestion from cloud storage / BQ
+    data.columns = [
+        snakify(col) if col != "T_CAL" else 'T_cal' for col in data.columns
+    ]
     key = 'customer_id'
     data[key] = data[key].astype("object")
     return data
