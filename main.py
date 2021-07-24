@@ -25,12 +25,11 @@ def demo():
     mbg, ggf = load_params("mbg.pkl", "ggf.pkl")
     t = 12
     d = 0.00764
-    print('Model parameters loaded successfully.')
     if request.method == 'GET':
         for file in os.listdir('./data'):
             if file.endswith('to_score.csv'):
                 data_file = file  # how do you make sure you have a single "to_score" file?
-        run_model('data/'+data_file, mbg=mbg, ggf=ggf, t=t, r=d)
+        run_model('./data/'+data_file, mbg=mbg, ggf=ggf, t=t, r=d)
         return render_template('train_score.html')
 
     if request.method == 'POST':
