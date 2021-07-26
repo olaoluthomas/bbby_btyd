@@ -9,24 +9,29 @@ train_data = "train_data.csv"
 
 
 def snakify(column_name):
-    '''
-    Function to convert pandas column names into snake case.
+    '''Function to convert pandas column names into snake case.
+    CSV's created by SAS have UPPERCASE column names.
     '''
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', column_name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 
 def load_data(data):
-    """
-    Load dataset as a pandas dataframe from csv.
+    """Load dataset into a pandas dataframe from csv.
+    The data should have the following columns:
+        customer_id: key
+        frequency_cal: # of unique days of txn.
+        recency_cal: # of days between first and last txn.
+        T_cal: # of days between first txn and last day of time period.
+        monetary_value: avg. product margin (per txn)
     """
     data = pd.read_csv(
         data)  # I need to set up ingestion from cloud storage / BQ
-    print('Data loaded to pandas DF.')
+    logging.info('Data loaded to pandas DF.')
     data.columns = [
         snakify(col) if col != "T_CAL" else 'T_cal' for col in data.columns
     ]
-    print('Data columns modified to conform to package rules')
+    logging.info('Data columns modified to conform to package rules')
     key = 'customer_id'
     data[key] = data[key].astype("object")
     return data
@@ -38,17 +43,17 @@ def mbg_fitter(data, penalty=0.1):
     """
     mbg = ModifiedBetaGeoFitter(penalizer_coef=penalty)
     mbg.fit(data['frequency_cal'], data['recency_cal'], data['T_cal'])
-    print('MBG parameters fit on training data.')
+    logging.info('MBG parameters fit on training data.')
     return mbg
 
 
 def ggf_fitter(data, penalty=0):
     """
-    Fit calibration data to derive Gamma Gamma mixing parameters.
+    Fit repeat calibration data to derive Gamma Gamma mixing parameters.
     """
     ggf = GammaGammaFitter(penalizer_coef=penalty)
     ggf.fit(data['frequency_cal'], data['monetary_value'])
-    print('Gamma Gamma parameters fit on repeat customer data.')
+    logging.info('Gamma Gamma parameters fit on repeat customer data.')
     return ggf
 
 
@@ -69,7 +74,7 @@ def save_pickle(mbg, ggf):
     """
     mbg.save_model('mbg.pkl', save_date=False, save_generate_data_method=False)
     ggf.save_model('ggf.pkl', save_date=False, save_generate_data_method=False)
-    print('Model shape and scale parameters saved to file.')
+    logging.info('Model shape and scale parameters saved to file.')
 
 
 def run_training(train_data):
