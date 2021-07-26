@@ -2,7 +2,7 @@
 from flask import Flask, request, render_template
 import pandas as pd
 import os
-from utils.scorer import load_params, ltv_predict, run_model
+from lib.scorer import load_params, ltv_predict, run_model
 
 app = Flask(__name__)
 
