@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
-from xform.trainer import load_data
+from src.trainer import load_data
 import logging
 
 output_file = "data/predictions.csv"
