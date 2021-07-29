@@ -2,7 +2,7 @@
 from flask import Flask, request, render_template
 import pandas as pd
 import os
-from xform.scorer import load_params, ltv_predict, run_model
+from src.scorer import load_params, ltv_predict, run_model
 
 app = Flask(__name__)
 
@@ -19,9 +19,9 @@ def user_input():
 
 @app.route("/demo", methods=['GET', 'POST'])
 def demo():
-    '''
-    Load model parameters and score population file OR score HTML form input.
-    '''
+    """
+    Load model parameters and score population file OR score HTML form input as a demo.
+    """
     mbg, ggf = load_params("mbg.pkl", "ggf.pkl")
     t = 12
     d = 0.00764
