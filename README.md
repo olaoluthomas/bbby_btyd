@@ -8,22 +8,22 @@ Create a docker image using the provided Docker file to perform a prediction on 
 
 In the directory that holds the Dockerfile, you can run a demo that makes a prediction from data collected via an HTML form.
 
-To build the docker image, run
+To build the docker image, run <br/>
 
-docker build -t <image_name> .
-e.g. 
+docker build -t <image_name> . <br/>
+For example,
 ```
 $ docker build -t ltv_image .
 ```
-To create a container from the image, run
+To create a container from the image, run <br/>
 
-docker run -it --name <container> -p 8080:8080 <image_name>
-e.g. 
+docker run -it --name <container> -p 8080:8080 <image_name> <br/>
+For example,
 ```
 $ docker run -it --name ltv_container -p 8080:8080 ltv_image
 ```
-Then navigate to localhost:8080 and you'll be taken to the website's homepage.
-To submit data via an HTML form, simply click on "User Input".
+Then navigate to localhost:8080 and you'll be taken to the website's homepage. <br/>
+To submit data via an HTML form, simply click on "User Input". <br/>
 
 Have fun!!!
 
