@@ -18,7 +18,7 @@ To create a container from the image, run
 docker run -it --name <container> -p 8080:8080 <image_name>
 e.g. $ docker run -it --name ltv_container -p 8080:8080 ltv_image
 ```
-Then navigate to localhost:8080 and you'll be navigated to the website's homepage.
+Then navigate to localhost:8080 and you'll be taken to the website's homepage.
 To submit data via an HTML form, simply click on "User Input".
 
 Have fun!!!
