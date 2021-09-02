@@ -4,7 +4,7 @@
 
 A probabilistic approach to estimating customer lifetime value using the "Buy 'Til You Die" methodology via the PyPI Lifetimes package.
 
-Create a docker image using the provided Docker file to perform a prediction on a single row of data submitted via HTML form (as a demo).
+Create a docker image from instructions in the Dockerfile to perform a prediction on a single row of data submitted via HTML form (as a demo).
 
 In the directory that holds the Dockerfile, you can run a demo that makes a prediction from data collected via an HTML form.
 
