@@ -4,7 +4,7 @@
 FROM python:3.9-slim
 
 LABEL version="v0.1"
-LABEL mainainer="Simeon Thomas simeon.thomas@bedbath.com"
+LABEL mainainer="Simeon Thomas thomasolaoluwa@gmail.com"
 
 # Allow statements and log messages to immediately appear in the Knative logs
 ENV PYTHONUNBUFFERED True
