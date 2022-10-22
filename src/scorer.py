@@ -57,4 +57,3 @@ def run_model(input_file, mbg, ggf, t, r):
         output_file, index=False,
         encoding='utf-8')  # set up dumping result to BQ/CS or console print.
     logging.info('Predictions saved to csv.')
-    
