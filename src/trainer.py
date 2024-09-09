@@ -5,15 +5,20 @@ import pandas as pd
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
 from sklearn.metrics import mean_absolute_error
 
-train_data = "train_data.csv"
 
+# class ltv_trainer(self) -> None:
+#     def __init__(self, model_dir=None, penalty=None):
+#         if penalty:
+#             self._mbg = ModifiedBetaGeoFitter(penalizer_coef=penalty)
+#             self._ggf = GammaGammaFitter(penalizer_coef=penalty)
+#         else:
+#             self._mbg = ModifiedBetaGeoFitter()
+#             self._ggf = GammaGammaFitter()
 
-def snakify(column_name):
-    '''Function to convert pandas column names into snake case.
-    CSV's created by SAS have UPPERCASE column names.
-    '''
-    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', column_name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+#     def load_data(self, data_path):
+#         data = pd.read_csv(data_path) # what checks are reqd?
+
+#     def train_mbg(self):
 
 
 def load_data(data):
@@ -28,10 +33,6 @@ def load_data(data):
     data = pd.read_csv(
         data)  # I need to set up ingestion from cloud storage / BQ
     logging.info('Data loaded to pandas DF.')
-    data.columns = [
-        snakify(col) if col != "T_CAL" else 'T_cal' for col in data.columns
-    ]
-    logging.info('Data columns modified to conform to package rules')
     key = 'customer_id'
     data[key] = data[key].astype("object")
     return data

@@ -1,5 +1,5 @@
 pandas==1.2.3
-numpy>=1.22
+numpy==1.22
 scikit-learn==0.24.1
 Lifetimes==0.11.3
 dill==0.3.3
