@@ -21,7 +21,7 @@ from sklearn.metrics import mean_absolute_error
 #     def train_mbg(self):
 
 
-def load_data(data):
+def load_data(data_path):
     """Load dataset into a pandas dataframe from csv.
     The data should have the following columns:
         customer_id: key
@@ -30,11 +30,10 @@ def load_data(data):
         T_cal: # of days between first txn and last day of time period.
         monetary_value: avg. product margin (per txn)
     """
-    data = pd.read_csv(
-        data)  # I need to set up ingestion from cloud storage / BQ
+    data = pd.read_csv(data_path)  # I need to set up ingestion from cloud storage / BQ
     logging.info('Data loaded to pandas DF.')
-    key = 'customer_id'
-    data[key] = data[key].astype("object")
+    if 'customer_id' in data.columns.tolist():
+        data['customer_id'] = data['customer_id'].astype("object")
     return data
 
 
@@ -58,7 +57,7 @@ def ggf_fitter(data, penalty=0):
     return ggf
 
 
-def save_training_error(repeat, ggf):
+def training_error(repeat, ggf):
     """
     Save error in repeat-customer average profit estimation.
     """
