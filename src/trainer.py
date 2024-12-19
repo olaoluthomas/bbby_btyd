@@ -4,6 +4,9 @@ import re
 import pandas as pd
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
 from sklearn.metrics import mean_absolute_error
+from src.utils import logging
+
+logger = logging.get_logger()
 
 
 # class ltv_trainer(self) -> None:
