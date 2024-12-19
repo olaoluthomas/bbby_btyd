@@ -3,6 +3,9 @@ from flask import Flask, request, render_template
 import pandas as pd
 import os
 from src.scorer import load_params, ltv_predict, run_model
+from src.utils import logging
+
+logger = logging.get_logger()
 
 app = Flask(__name__)
 
@@ -22,7 +25,8 @@ def demo():
     """
     Load model parameters and score population file OR score HTML form input as a demo.
     """
-    mbg, ggf = load_params("mbg.pkl", "ggf.pkl")
+    # mbg, ggf = load_params("mbg.pkl", "ggf.pkl")
+    mbg, ggf = load_params()
     t = 12
     d = 0.00764
     if request.method == 'GET':

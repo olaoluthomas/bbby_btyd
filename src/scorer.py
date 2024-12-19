@@ -1,8 +1,9 @@
 ﻿# -*- coding: utf-8 -*-
 from lifetimes import ModifiedBetaGeoFitter, GammaGammaFitter
 from src.trainer import load_data
-import logging
+from src.utils import logging
 
+logger = logging.get_logger()
 output_file = "data/predictions.csv"
 
 
